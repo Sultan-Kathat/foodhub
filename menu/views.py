@@ -6,26 +6,6 @@ from django.contrib.auth.models import User
 from .models import Menu, Category, Restaurant
 
 # Create your views here.
-dish_name=["Chicken Biryani", "Mutton Biryani", " Chicken Biryani (Boneless)", "Mutton Biryani(Boneless)", "Egg Biryani",  ]
-
-price=["250.00", "300.00", "350.00","300.00", "350.00", ],
-
-ingredients=[
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-
-],
-menu={}
-
-
-
-
-
-
-
 
 def menu(request, name_fp):
 
