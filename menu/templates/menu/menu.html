@@ -1,17 +1,37 @@
 {% extends "menu/layout.html"%}
 
 {% block restaurant%}
-<h1>{{name_fp}}</h1>
+<h1>{{restaurant_name}}</h1>
 {% endblock %}
 
 {%block restaurant_navbar%}
-{{name_fp}}
+{{restaurant_name}}
 {%endblock%}
+
+{%block category%}
+{%for category in categories%}
+    <li class="nav-item">
+        <a class="nav-link text-light" id="category" href="#">{{category.category_name}}</a>
+    </li>
+{%empty%}
+    <li class="nav-item">
+        <a class="nav-link text-light" href="#">Category1</a>
+    </li>
+{%endfor%}
+{% endblock %}
 
 <!-- {%block body%}
     <h1>{{name_fp}}</h1>
 {% endblock %} -->
 
 {% block menu_item%}
-
+    {%for item in menu_items%}
+    <div class="container menu_item" >
+        <h4>{{item.item_name}}   </h4> 
+        <p id="price">₹ {{item.price}}</p>
+        <p id="ing"> {{item.ingredient}}</p>
+    </div>
+    {%empty%}
+    <h4> No items in Menu</h4>
+    {%endfor%}
 {%endblock%}

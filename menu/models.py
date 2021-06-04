@@ -16,7 +16,7 @@ class Category(models.Model):
     rest_category = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="category",null=True)
 
     def __str__(self):
-        return f"{self.id}: {self.category_name}, Restaurant : {self.rest_category}"
+        return f"{self.category_name}:({self.rest_category})"
 
 class Menu(models.Model):
     item_name = models.CharField(max_length=48)
