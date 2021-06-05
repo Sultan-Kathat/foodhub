@@ -7,5 +7,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name="logout"),
     path('editmenu/<int:menu_id>', views.edit_menu, name="edit_menu"),
     path('add/', views.add, name="add"),
+    path('category/', views.category, name="category"),
 
 ]

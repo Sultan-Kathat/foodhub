@@ -1,0 +1,36 @@
+{% extends "manager/layout.html"%}
+
+{% block restaurant%}
+    {%if restaurant%}
+    <p>User: {{username}}
+        <a href="{% url 'logout'%}"> (Logout)</a>
+    </p>
+    <h1>{{restaurant}} </h1>  
+    
+   
+    {%endif%}
+
+{% endblock %}
+
+
+{%block body%}
+
+    <div class="container">
+        <form action="{% url 'category' %}" method="POST">
+            {% csrf_token %}
+            <label >Add New Category:</label>
+            <input type="text" class="form-control " name="category"  required>     
+
+            <button class="btn btn-primary" type="submit" style="margin-top: 15px;">Save</button>
+            <a href="{%url 'index'%}" class="btn btn-danger " style="margin-top: 15px;">Cancel</a>
+        </form>
+
+    </div>
+
+
+    {% if message%}
+    <div class="alert alert-danger">
+        <strong>Alert!</strong> {{message}}
+      </div>
+    {% endif%}
+{% endblock%}

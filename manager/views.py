@@ -118,18 +118,21 @@ def add(request):
 
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
-
+    message = ""
     if request.method =="POST":
-        m = Menu(
-        item_name=request.POST["item_name"],
-        price = request.POST["price"],
-        ingredient = request.POST["ingredient"],
-        stock = request.POST["stock"],            
-        category = Category.objects.get(pk = request.POST["category"]),
-        rest_id = User.objects.get(username = request.user.username)
-        )
-        m.save()
-        return HttpResponseRedirect(reverse("index"))
+        if Menu.objects.filter(item_name = request.POST["item_name"]).exists():
+            message = "Item already exists in Menu"
+        else:
+            m = Menu(
+            item_name=request.POST["item_name"],
+            price = request.POST["price"],
+            ingredient = request.POST["ingredient"],
+            stock = request.POST["stock"],            
+            category = Category.objects.get(pk = request.POST["category"]),
+            rest_id = User.objects.get(username = request.user.username)
+            )
+            m.save()
+            return HttpResponseRedirect(reverse("index"))
 
     #restaurant name to display on the top
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
@@ -145,8 +148,39 @@ def add(request):
 
         "categories": categories,
         "rest_id":rest_id,
+        "message": message,
     } )
 
 
+def category(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
     
+    restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
+    message=""
+    if request.method=="POST":
+        new_category = request.POST["category"]
+        #print(f"new vategory: {new_category}")
+        if Category.objects.filter(category_name = new_category).exists():
+            message = "Category already exists in Menu"
+        else:        
+            c = Category(
+                category_name = new_category, 
+                rest_category = Restaurant.objects.get(user_name = request.user)
+                )
+            c.save()
+            return HttpResponseRedirect(reverse("index"))
+        
+
+
+
     
+
+    return render(request, "manager/category.html",{
+        "restaurant": restaurant,
+        "username": request.user.username,
+        "message":message,
+    })
+
+    
+     

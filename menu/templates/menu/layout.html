@@ -21,39 +21,7 @@
             color: rgb(155, 20, 20);
         }
    </style> -->
-   <script>
-     document.addEventListener('DOMContentLoaded', ()=>{
-      document.querySelectorAll('#category').forEach(category=>{
-
-        category.addEventListener('click', (c)=>{
-          console.log(c.target);
-          hide(c.target.innerHTML);
-          //document.getElementById('test').innerHTML = c.target.innerHTML
-          // document.querySelectorAll(".menu_item").forEach(item=>{
-          //   if this.data.category = 
-
-          // })
-        })
-      })
-     })
-
-     function hide(category_clicked){
-      console.log("inside hide")
-      console.log(category_clicked)
-      document.querySelectorAll('.menu_item').forEach(menu=>{
-        
-        if (menu.dataset.category === category_clicked) {
-          console.log(menu);
-          menu.classList.remove("d-none")
-        }
-        else{
-          menu.classList.add("d-none")
-        }
-      })
-
-     }
-
-   </script>
+   <script src="{% static 'menu/menu.js'%}" type="text/javascript"></script>
 
 
 </head>
@@ -80,9 +48,13 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
 
     <ul class="navbar-nav">
-        {%block category%}
+      <!-- Show-All category is displayed from here -->
+      <li class="nav-item" >
+        <a class="nav-link text-light" id="category" href="#">Show All</a>
+      </li>
+      {%block category%}
 
-        {% endblock %}
+      {% endblock %}
 
         <!-- data displayed in category block
       <li class="nav-item">

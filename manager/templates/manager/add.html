@@ -47,5 +47,11 @@
         <a href="{%url 'index'%}" class="btn btn-danger " style="margin-top: 15px;">Cancel</a>
     </form>
 
+    {%if message%}
+        <div class="alert alert-danger">
+        <strong>Alert!</strong> {{message}}
+      </div>
+
+    {%endif%}
 </div>
 {%endblock%}
