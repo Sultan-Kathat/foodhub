@@ -21,6 +21,10 @@ def index(request):
         #     login(request, user)
         #     # Redirect to a success page.
         # #return HttpResponse("User does not exist")
+    #print('here')
+    if request.method=="POST":
+        print("hello")
+        print(request.POST["price"])
 
     
    # user = User.objects.get().all()
@@ -125,7 +129,7 @@ def add(request):
         else:
             m = Menu(
             item_name=request.POST["item_name"],
-            price = request.POST["price"],
+            price = int(request.POST["price"]),
             ingredient = request.POST["ingredient"],
             stock = request.POST["stock"],            
             category = Category.objects.get(pk = request.POST["category"]),
@@ -183,4 +187,24 @@ def category(request):
     })
 
     
-     
+def update_price(request, item_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    if request.method=="POST":
+        Menu.objects.filter(id = item_id).update(price = int(request.POST["price"]))
+        print(item_id)
+        print(request.POST["price"])
+
+    return HttpResponseRedirect(reverse("index"))
+
+def update_stock(request, item_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    if request.method=="POST":
+        Menu.objects.filter(id = item_id).update(stock = request.POST["stock"])
+        print(item_id)
+        print(request.POST["stock"])
+
+    return HttpResponseRedirect(reverse("index"))

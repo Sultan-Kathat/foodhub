@@ -24,8 +24,33 @@
     {%for item in menu_items%}
     <div class="container menu_item" >
         <h4><a href="{% url 'edit_menu' item.id %}">{{item.item_name}} </a>  </h4> 
-        <p id="price">₹ {{item.price}}</p>
+
+        <form action="{%url 'update_price' item.id %}" method="POST" >
+            {%csrf_token%}
+            <span style="font-size:25px;">Price:  </span>
+            <input type="text" name="price" id="price" value="{{item.price}}" style="width: 120px;">  <span style="font-size:30px;">₹  </span>
+            <button class="btn btn-primary" type="submit">Update Price</button>
+        </form>
+
+        <form class="form-inline" action="{%url 'update_stock' item.id %}" method="POST" style="padding-top:15px;width: 300px;" >
+            {%csrf_token%}
+            <span style="font-size:25px;">Stock:  </span>
+            <select class="form-control " name="stock"  required  style="margin:10px">
+                {% if item.stock %}  
+                    <option value=True>Available</option>
+                    <option value=False >Unavailable</option>
+                {%else%}
+                    <option value=False >Unavailable</option>
+                    <option value=True>Available</option>
+                    
+                {%endif%}
+            </select>
+                <button class="btn btn-primary" type="submit" style="padding-left:10px" >Update</button>
+            
+        </form>
+
         <p id="ing"> {{item.ingredient}}</p>
+
     </div>
     {%empty%}
     <h4> No items in Menu</h4>
