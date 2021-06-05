@@ -16,10 +16,10 @@ def menu(request, name_fp):
     username = user.username
     restaurant_name = user.restaurant.get()
 
-    categories = Category.objects.filter(rest_category = restaurant_name)
+    categories = Category.objects.filter(rest_category = restaurant_name,)
 
     #menu_items = user.menu_items.all()
-    menu_items = Menu.objects.filter(rest_id = user ).order_by("category")
+    menu_items = Menu.objects.filter(rest_id = user, stock = True ).order_by("category")
     print(restaurant_name.rest_name)
 
 
@@ -32,6 +32,7 @@ def menu(request, name_fp):
     return render(request, 'menu/menu.html',{
         "name_fp": name_fp,
         "restaurant_name" : restaurant_name,
+
         "categories": categories,
         "menu_items": menu_items
         #"menu":menu,

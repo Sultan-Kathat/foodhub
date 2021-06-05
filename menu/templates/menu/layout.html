@@ -8,10 +8,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- For Google fonts -->
+ 
     
     {% load static %}
     <!-- add css static file -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'menu/style.css' %}">
    <!-- <style>
        #price {
             font-family:Arial, Helvetica, sans-serif;
@@ -19,6 +21,39 @@
             color: rgb(155, 20, 20);
         }
    </style> -->
+   <script>
+     document.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('#category').forEach(category=>{
+
+        category.addEventListener('click', (c)=>{
+          console.log(c.target);
+          hide(c.target.innerHTML);
+          //document.getElementById('test').innerHTML = c.target.innerHTML
+          // document.querySelectorAll(".menu_item").forEach(item=>{
+          //   if this.data.category = 
+
+          // })
+        })
+      })
+     })
+
+     function hide(category_clicked){
+      console.log("inside hide")
+      console.log(category_clicked)
+      document.querySelectorAll('.menu_item').forEach(menu=>{
+        
+        if (menu.dataset.category === category_clicked) {
+          console.log(menu);
+          menu.classList.remove("d-none")
+        }
+        else{
+          menu.classList.add("d-none")
+        }
+      })
+
+     }
+
+   </script>
 
 
 </head>

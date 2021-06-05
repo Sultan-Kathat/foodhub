@@ -82,16 +82,71 @@ def edit_menu(request, menu_id):
 
 
     if request.method == "POST":
-        print(f"Stock value: {request.POST['stock']}")
+        print(f"Item_name: {request.POST['item_name']}")
+        print(f"Category ID: {request.POST['category']}")
+        Menu.objects.filter(pk=menu_id).update(
+            item_name=request.POST["item_name"],
+            price = request.POST["price"],
+            ingredient = request.POST["ingredient"],
+            stock = request.POST["stock"],            
+            category = Category.objects.get(pk = request.POST["category"]),
+            rest_id = User.objects.get(username = request.user.username)
+            )
         return HttpResponseRedirect(reverse("index"))
+    
+    #restaurant name to display on the top
+    restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
 
     menu = Menu.objects.get(pk = menu_id)
     categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user))
     rest_id = User.objects.get(username = request.user.username)
 
     return render(request, "manager/editmenu.html",{
+        "restaurant":restaurant.rest_name,
+        "username":request.user.username,
+
         "menu":menu,
         "categories": categories,
         "rest_id":rest_id,
+
     })
+
+
+# Add new menu item in catalogue
+
+def add(request):
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    if request.method =="POST":
+        m = Menu(
+        item_name=request.POST["item_name"],
+        price = request.POST["price"],
+        ingredient = request.POST["ingredient"],
+        stock = request.POST["stock"],            
+        category = Category.objects.get(pk = request.POST["category"]),
+        rest_id = User.objects.get(username = request.user.username)
+        )
+        m.save()
+        return HttpResponseRedirect(reverse("index"))
+
+    #restaurant name to display on the top
+    restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
+
+    # laod the categories and restaurant to the form select option
+    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user))
+    rest_id = User.objects.get(username = request.user.username)
+
+
+    return render(request, "manager/add.html",{
+        "restaurant":restaurant,
+        "username": request.user.username,
+
+        "categories": categories,
+        "rest_id":rest_id,
+    } )
+
+
+    
     
