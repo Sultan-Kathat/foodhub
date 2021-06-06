@@ -1,0 +1,43 @@
+{% extends "manager/layout.html" %}
+
+
+{% block restaurant%}
+    {%if restaurant%}
+    <p>User: {{username}}
+        <a href="{% url 'logout'%}"> (Logout)</a>
+    </p>
+    <h1>{{restaurant}} </h1>  
+    
+   
+    {%endif%}
+
+{% endblock %}
+
+{%block restaurant_navbar%}
+    {{restaurant}}
+{%endblock%}
+
+
+{%block body%}
+    <div class="container" style="margin-top: 100px;">
+        <form action="{% url 'delete_category' %}" method="POST">
+            {% csrf_token%}
+            <label >Remove Category: <span style="color: red;">Note: All the item inside the category will be deleted</span> </label>
+            <select class="form-control" name="category_id" required> 
+                <option></option>
+                {% for category in categories%}
+                <option value="{{category.id}}">{{category.category_name}}</option>
+                {%endfor%}
+
+            </select>
+            
+            <button class="btn btn-primary" type="submit" style="margin-top: 15px;">Delete</button>
+        </form>
+    </div>
+
+    {% if message%}
+        <div class="alert alert-danger">
+            <strong>Message</strong> {{message}}
+        </div>
+    {% endif%}
+{%endblock%}

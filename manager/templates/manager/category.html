@@ -1,4 +1,4 @@
-{% extends "manager/layout.html"%}
+{% extends "manager/layout.html" %}
 
 {% block restaurant%}
     {%if restaurant%}
@@ -35,6 +35,8 @@
     {% if message%}
     <div class="alert alert-danger">
         <strong>Alert!</strong> {{message}}
-      </div>
+    </div>
     {% endif%}
+
+
 {% endblock%}

@@ -174,16 +174,14 @@ def category(request):
                 )
             c.save()
             return HttpResponseRedirect(reverse("index"))
-        
 
-
-
-    
+      
 
     return render(request, "manager/category.html",{
         "restaurant": restaurant,
         "username": request.user.username,
         "message":message,
+        # "categories":categories,
     })
 
     
@@ -208,3 +206,42 @@ def update_stock(request, item_id):
         print(request.POST["stock"])
 
     return HttpResponseRedirect(reverse("index"))
+
+
+def delete_menu(request, menu_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+
+    if Menu.objects.filter(id = menu_id).exists():
+        Menu.objects.filter(id = menu_id).delete()
+    return HttpResponseRedirect(reverse("index"))
+
+def delete_category(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    message=""
+
+    if request.method=="POST":  
+        category_id = request.POST["category_id"]
+        if Category.objects.filter(id = category_id).exists():
+            Category.objects.filter(id = category_id).delete()
+            message = "Category deleted"
+        
+
+
+    restaurant= Restaurant.objects.get(user_name = request.user)
+    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user)) 
+
+    return render(request, "manager/deletecategory.html",{
+        "restaurant":restaurant,
+        "categories":categories,
+        "message":message,
+    })
+
+
+
+
+    
+        
