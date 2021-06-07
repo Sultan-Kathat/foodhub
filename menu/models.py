@@ -7,6 +7,12 @@ from django.contrib.auth.models import User
 class Restaurant(models.Model):
     rest_name= models.CharField(max_length=64)
     user_name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="restaurant", null=True)
+    address_1 = models.CharField(max_length=64, blank=True)
+    address_2 = models.CharField(max_length=64, blank=True)
+    pincode = models.CharField(max_length=6, blank=True)
+    city = models.CharField(max_length=64, blank=True)
+    state=models.CharField(max_length=64, blank=True)
+    phone = models.CharField(max_length=32, blank=True)
     
     def __str__(self):
         return f"{self.rest_name}"
@@ -14,6 +20,7 @@ class Restaurant(models.Model):
 class Category(models.Model):
     category_name = models.CharField(max_length=32)
     rest_category = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="category",null=True)
+
 
     def __str__(self):
         return f"{self.category_name}:({self.rest_category})"

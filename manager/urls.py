@@ -12,5 +12,6 @@ urlpatterns = [
     path('updatestock/<int:item_id>', views.update_stock, name="update_stock"),
     path('deletemenu/<int:menu_id>',views.delete_menu, name="delete_menu" ),
     path('deletecategory/',views.delete_category,name="delete_category"),
+    path('qrcode/', views.qrcode, name="qrcode"),
 
 ]

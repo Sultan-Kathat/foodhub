@@ -1,10 +1,20 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, request
+from django.http import HttpResponseRedirect, request, FileResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from menu.models import Restaurant, Category, Menu
+
+from reportlab.pdfgen import canvas
+from reportlab.graphics.barcode import code39, code128, code93, createBarcodeDrawing
+from reportlab.graphics.barcode import eanbc, qr, usps
+from reportlab.graphics import renderPDF
+from reportlab.graphics.shapes import Drawing 
+from reportlab.lib.units import mm
+from reportlab.lib.colors import pink, black, red, blue, green
+
+import io
 
 
 # Create your views here.
@@ -30,8 +40,9 @@ def index(request):
    # user = User.objects.get().all()
     if Restaurant.objects.filter(user_name = request.user).exists():
         restaurant_name = Restaurant.objects.get(user_name = request.user)
+
         user = User.objects.get(username=request.user.username)
-        #restaurant_name = user.restaurant.get()
+ 
 
         categories = Category.objects.filter(rest_category = restaurant_name)
 
@@ -239,6 +250,74 @@ def delete_category(request):
         "categories":categories,
         "message":message,
     })
+
+def qrcode(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    message=""
+
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+    p.setPageSize((105*mm, 148*mm))
+
+    # draw rectangle
+    p.setFillColorCMYK(0,0.6,0.8,0)
+    #p.setFillColor(black)
+    #p.setFillColorRGB(14,25,12)
+    #canvas.rect(x, y, width, height, stroke=1, fill=0) 
+    p.rect(0*mm, 133*mm,105*mm, 15*mm,stroke=0, fill=1)
+
+    #print name of restaurant on the PDF
+    r = Restaurant.objects.get(user_name= request.user)
+    rest_name = r.rest_name
+    font_size = 20
+    #Helvetica
+    p.setFont('Helvetica-Bold', font_size)
+    p.setFillColorCMYK(0,0,0,0.1)
+    #canvas.drawCentredString will draw string keeping the x,y in center of the string
+    p.drawCentredString(52.5*mm, 138.5*mm, rest_name.upper())
+    #MENU
+    p.setFont('Helvetica-Bold', 30)
+    p.setFillColorCMYK(0,1,1,0)
+    p.drawCentredString(52.5*mm, 120*mm, "MENU")
+    #Scan the code
+    p.setFont('Helvetica-Bold', 20)
+    p.setFillColorCMYK(0.02,0.86,0.67,0.02)
+    p.rect(22*mm, 105*mm,61*mm, 9*mm,stroke=0, fill=1)
+    p.setFillColorCMYK(0,0,0,0.1)
+    p.drawCentredString(52.5*mm, 107*mm, "SCAN THE CODE")
+
+    #Helvetica-Oblique:
+    p.setFont('Courier-Oblique', 14)
+    p.setFillColor(black)
+    p.drawCentredString(52.5*mm, 15*mm, f"visit: ZuBu.in/menu/{request.user.username}")
+
+
+ 
+
+
+    #draw a QR code
+    qr_code = qr.QrCodeWidget(f"visit: ZuBu.in/menu/{request.user.username}")
+    bounds = qr_code.getBounds()
+    width = bounds[2] - bounds[0]
+    height = bounds[3] - bounds[1]
+    d = Drawing(85*mm, 85*mm,transform=[85*mm/width,0,0,85*mm/height,0,0])
+    # transform=[45./width,0,0,45./height,0,0]
+    d.add(qr_code)
+    renderPDF.draw(d, p, 10*mm, 20*mm)
+
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="qrcode.pdf")
+
+
+
+
+
 
 
 
