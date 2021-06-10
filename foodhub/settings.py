@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+#RUN this function t load values from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,10 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-4o99w^a0od(^$2$&if6dv5m#^z1mhld$=5edaqyfn179a-y-bf'
-SECRET_KEY = 'django-insecure-7d98w^a6od(^$2$&if6dv5m#^z1mhld$=5edaqyfn278-g-hj'
+SECRET_KEY = os.getenv('ZUBU_SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+if os.environ['DJANGO_DEBUG']== "False":
+    print("inside false loop")
+    DEBUG = False
+else:
+    print("inside true loop")
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -96,14 +107,16 @@ WSGI_APPLICATION = 'foodhub.wsgi.application'
 # }
 
 # database details with environment variable
+# c=os.getenv('ZUBU_SECRET_KEY')
+# print(f"printed in settingd: {c}")
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['ZUBU_DB_NAME'],
-        'USER': os.environ['ZUBU_DB_USER'],
-        'PASSWORD': os.environ['ZUBU_DB_PWD'],
-        'HOST': os.environ['ZUBU_DB_HOST'],
+        'NAME': os.environ['DB_ZUBU_NAME'],
+        'USER': os.environ['DB_ZUBU_USER'],
+        'PASSWORD': os.environ['DB_ZUBU_PWD'],
+        'HOST': os.environ['DB_ZUBU_HOST'],
         'PORT': '5432',
     }
 }
