@@ -21,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4o99w^a0od(^$2$&if6dv5m#^z1mhld$=5edaqyfn179a-y-bf'
+#SECRET_KEY = 'django-insecure-4o99w^a0od(^$2$&if6dv5m#^z1mhld$=5edaqyfn179a-y-bf'
+SECRET_KEY = 'django-insecure-7d98w^a6od(^$2$&if6dv5m#^z1mhld$=5edaqyfn278-g-hj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -76,12 +77,12 @@ WSGI_APPLICATION = 'foodhub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -89,10 +90,38 @@ DATABASES = {
 #         'NAME': 'foodhub',
 #         'USER': 'postgres',
 #         'PASSWORD': 'admin123',
-#         'HOST': '127.0.0.1',
+#         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
+
+# database details with environment variable
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['ZUBU_DB_NAME'],
+        'USER': os.environ['ZUBU_DB_USER'],
+        'PASSWORD': os.environ['ZUBU_DB_PWD'],
+        'HOST': os.environ['ZUBU_DB_HOST'],
+        'PORT': '5432',
+    }
+}
+
+
+# database for production
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'zubu_ubuntu',
+#         'USER': 'zubu_django',
+#         'PASSWORD': '#123ZubuSultan',
+#         'HOST': 'database-zubu.cooy2uvelzbz.us-east-2.rds.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -131,7 +160,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

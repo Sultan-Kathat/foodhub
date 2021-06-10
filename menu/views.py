@@ -11,7 +11,7 @@ def menu(request, name_fp):
 
     if not User.objects.filter(username=name_fp).exists():
         return HttpResponse("Restaurant Does Not Exist")
-    
+
     user = User.objects.get(username=name_fp)
     username = user.username
     restaurant_name = user.restaurant.get()

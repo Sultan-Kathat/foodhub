@@ -17,6 +17,7 @@ from reportlab.lib.colors import pink, black, red, blue, green
 import io
 
 
+
 # Create your views here.
 def index(request):   
 
@@ -32,9 +33,10 @@ def index(request):
         #     # Redirect to a success page.
         # #return HttpResponse("User does not exist")
     #print('here')
-    if request.method=="POST":
-        print("hello")
-        print(request.POST["price"])
+
+    # if request.method=="POST":
+    #     print("hello")
+    #     print(request.POST["price"])
 
     
    # user = User.objects.get().all()
@@ -97,8 +99,8 @@ def edit_menu(request, menu_id):
 
 
     if request.method == "POST":
-        print(f"Item_name: {request.POST['item_name']}")
-        print(f"Category ID: {request.POST['category']}")
+        # print(f"Item_name: {request.POST['item_name']}")
+        # print(f"Category ID: {request.POST['category']}")
         Menu.objects.filter(pk=menu_id).update(
             item_name=request.POST["item_name"],
             price = request.POST["price"],
@@ -202,8 +204,8 @@ def update_price(request, item_id):
 
     if request.method=="POST":
         Menu.objects.filter(id = item_id).update(price = int(request.POST["price"]))
-        print(item_id)
-        print(request.POST["price"])
+        # print(item_id)
+        # print(request.POST["price"])
 
     return HttpResponseRedirect(reverse("index"))
 
@@ -213,8 +215,8 @@ def update_stock(request, item_id):
 
     if request.method=="POST":
         Menu.objects.filter(id = item_id).update(stock = request.POST["stock"])
-        print(item_id)
-        print(request.POST["stock"])
+        # print(item_id)
+        # print(request.POST["stock"])
 
     return HttpResponseRedirect(reverse("index"))
 

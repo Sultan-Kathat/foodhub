@@ -35,7 +35,7 @@
         <form class="form-inline" action="{%url 'update_stock' item.id %}" method="POST" style="padding-top:15px;width: 300px;" >
             {%csrf_token%}
             <span style="font-size:25px;">Stock:  </span>
-            <select class="form-control " name="stock"  required  style="margin:10px">
+            <select class="form-control " name="stock"  required  style="margin:10px; width: 120px;">
                 {% if item.stock %}  
                     <option value=True>Available</option>
                     <option value=False >Unavailable</option>
