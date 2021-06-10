@@ -32,10 +32,8 @@ SECRET_KEY = os.getenv('ZUBU_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 if os.environ['DJANGO_DEBUG']== "False":
-    print("inside false loop")
     DEBUG = False
 else:
-    print("inside true loop")
     DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
@@ -173,7 +171,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+if os.environ['ZUBU_PRODUCTION']== "True":
+    print("inside production loop")
+    STATIC_ROOT = '/var/www/static/'
+else:
+    print("inside devloper loop")
+    STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
