@@ -6,7 +6,7 @@
 
 
 
-{%block category%}
+<!-- {%block category%}
 {%for category in categories%}
     <li class="nav-item" >
         <a class="nav-link text-light" id="category" href="#">{{category.category_name}}</a>
@@ -16,18 +16,31 @@
         <a class="nav-link text-light" href="#">Category1</a>
     </li>
 {%endfor%}
-{% endblock %}
+{% endblock %} -->
 
+{%block category_select%}
+    {% for category in categories%}
+    <option value="{{category}}">{{category}}</option>
+    {%empty%}
+    <option value="No Category">No Category</option>
+    {%endfor%}
+{%endblock%}
 
 
 {% block menu_item%}
-    {%for item in menu_items%}
-    <div class="container menu_item" data-category="{{item.category.category_name}}"  >
-        <h4>{{item.item_name}}   </h4> 
-        <p id="price">₹ {{item.price}}</p>
-        <p id="ing"> {{item.ingredient}}</p>
-    </div>
-    {%empty%}
-    <h4> No items in Menu</h4>
+    {% for category in categories%}
+    <div class="container menu_item" id="category_inside" data-category="{{category}}"  ><h2> {{category}}</h2></div>
+        
+        {%for item in menu_items%}
+            {%if item.category.category_name == category%}
+                <div class="container menu_item" data-category="{{item.category.category_name}}" id="{{item.category.category_name}}" >
+                    <h4>{{item.item_name}}   </h4> 
+                    <p id="price">₹ {{item.price}}</p>
+                    <p id="ing"> {{item.ingredient}}</p>
+                </div>
+            {%endif%}
+        {%empty%}
+            <h4> No items in Menu</h4>
+        {%endfor%}
     {%endfor%}
 {%endblock%}

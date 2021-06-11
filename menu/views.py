@@ -16,11 +16,24 @@ def menu(request, name_fp):
     username = user.username
     restaurant_name = user.restaurant.get()
 
-    categories = Category.objects.filter(rest_category = restaurant_name,)
+    categories = Category.objects.filter(rest_category = restaurant_name,).order_by("priority")
+    
+    categories_active = []
+    for category in categories:
+        if category.menu_items.all().count()>0: # check if the category have any item in it 
+            #print(f"{category.category_name}:  {category.menu_items.all()}")
+            for item in category.menu_items.all(): # calling all the item in category using related name and if they have stock/available
+                if item.stock==True:
+                    categories_active.append(category.category_name)
+                break
+        else:
+            print(category)
+    print(categories_active)
+
 
     #menu_items = user.menu_items.all()
     menu_items = Menu.objects.filter(rest_id = user, stock = True ).order_by("category")
-    print(restaurant_name.rest_name)
+    #print(restaurant_name.rest_name)
 
 
     # if not request.user.is_authenticated:
@@ -33,7 +46,7 @@ def menu(request, name_fp):
         "name_fp": name_fp,
         "restaurant_name" : restaurant_name,
 
-        "categories": categories,
+        "categories": categories_active,
         "menu_items": menu_items
         #"menu":menu,
      

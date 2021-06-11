@@ -7,7 +7,7 @@ class MenuAdmin(admin.ModelAdmin):
     list_display = ("id", "item_name", "price", "stock","category", "rest_id")
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id","category_name","rest_category")
+    list_display = ("id","category_name","rest_category", "priority")
 
 # Register your models here.
 admin.site.register(Menu, MenuAdmin)

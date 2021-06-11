@@ -20,10 +20,10 @@ class Restaurant(models.Model):
 class Category(models.Model):
     category_name = models.CharField(max_length=32)
     rest_category = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="category",null=True)
-
+    priority = models.SmallIntegerField(default=1000)
 
     def __str__(self):
-        return f"{self.category_name}:({self.rest_category})"
+        return f"{self.category_name}({self.rest_category})"
 
 class Menu(models.Model):
     item_name = models.CharField(max_length=48)

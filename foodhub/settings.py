@@ -172,10 +172,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 if os.environ['ZUBU_PRODUCTION']== "True":
-    print("inside production loop")
+    #print("inside production loop")
     STATIC_ROOT = '/var/www/static/'
 else:
-    print("inside devloper loop")
+    #print("inside devloper loop")
     STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 
 
