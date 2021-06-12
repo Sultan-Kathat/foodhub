@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{FoodHub}}</title>
+    <title>Zubu Manager</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -11,7 +11,8 @@
     
     {% load static %}
     <!-- add css static file -->
-    <link rel="stylesheet" type="text/css" href="{% static 'menu/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'manager/manager.css' %}">
+    <script src="{% static 'manager/manager.js'%}" type="text/javascript"></script>
    <!-- <style>
        #price {
             font-family:Arial, Helvetica, sans-serif;
@@ -62,6 +63,7 @@
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'category'%}">Add Category</a>
+            <a class="dropdown-item" href="{% url 'allcategory'%}">View Category</a>
             <a class="dropdown-item" href="{% url 'delete_category'%}">Remove Category</a>
         
           </div>
@@ -78,6 +80,9 @@
   <br>
 
   <!-- "d-none" class is used to set diaplay property to none -->
+
+  {%block category_select%}
+  {%endblock%}
 
   {% block menu_item%}
   {%endblock%}

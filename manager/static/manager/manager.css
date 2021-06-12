@@ -32,16 +32,15 @@
  #category_inside{
      padding-top: 30px;
      padding-bottom: 20px;
-     font-family:'Satisfy' ;
+     font-family:'Roboto' ;
      color:rgb(107, 105, 105); ;
      text-decoration: underline;
-     
      
  }
 
  /* 'Caveat' */
- .menu_item h5 {
-     font-family:'Roboto','Dancing Script';
+ .menu_item h4 {
+     font-family:Arial, Helvetica, sans-serif;
      font-size: 25px;
      /* color: rgb(221, 168, 21);  */
      /* color: #3D72A4; */
@@ -53,20 +52,18 @@
      font-family:sans-serif;
      font-size: 20px;
      color:rgb(107, 105, 105);
-     font-weight:bold;
  }
  
  #ing {
      font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-     font-size:17px;
+     font-size:20px;
      color: rgb(90, 87, 87);
      /* font-style: italic; */
  }
  
 
  #select_category{
-     width: 380px;
-     
+     width: 400px;
  }
 
  #top_bar{
@@ -84,10 +81,6 @@
 
  #select_title{
 
-    font-family:'Satisfy' ;
+    font-family:Arial, Helvetica, sans-serif ;
     font-style: bold;
- }
-
- #div_select{
-     background-color: white;
  }

@@ -25,7 +25,7 @@ def menu(request, name_fp):
             for item in category.menu_items.all(): # calling all the item in category using related name and if they have stock/available
                 if item.stock==True:
                     categories_active.append(category.category_name)
-                break
+                    break
         else:
             print(category)
     print(categories_active)

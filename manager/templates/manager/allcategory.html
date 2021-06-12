@@ -1,0 +1,49 @@
+{% extends "manager/layout.html" %}
+
+{% block restaurant%}
+    {%if restaurant%}
+    <p>User: {{username}}
+        <a href="{% url 'logout'%}"> (Logout)</a>
+    </p>
+    <h1>{{restaurant}} </h1>  
+    
+   
+    {%endif%}
+
+{% endblock %}
+
+{%block restaurant_navbar%}
+    {{restaurant}}
+{%endblock%}
+
+{%block body%}
+    <div class="container ">
+        <h2>All Categories</h2>
+        {%for category in categories%}
+            <form class="form-inline" action="{% url 'editcategory' category.id%}" method="POST">
+                {%csrf_token%}
+                <div class="form-group" style="padding: 10px;">
+                    <label for="category" style="font-size: 20px;">Category: </label>
+                    <input type="text" class="form-control" name="category" value="{{category.category_name}}">
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority: </label>
+                    <input type="text" class="form-control" name="priority" value="{{category.priority}}">
+                </div>
+                <div>
+                <button type="submit" class="btn btn-info" style="margin-left: 10px;">SAVE CATEGORY DETAILS</button>
+                </div>
+            </form>
+            <hr>
+        {%empty%}
+            <p>No categories to display, add category from <a href="{% url 'category'%}">Add category</a> option</p>
+        {%endfor%}
+    </div>
+
+    {%if message%}
+    <div class="alert alert-info">
+        <strong>Messag:</strong> {{message}}
+      </div>
+    {%endif%}
+
+{%endblock%}

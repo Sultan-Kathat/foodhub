@@ -13,5 +13,7 @@ urlpatterns = [
     path('deletemenu/<int:menu_id>',views.delete_menu, name="delete_menu" ),
     path('deletecategory/',views.delete_category,name="delete_category"),
     path('qrcode/', views.qrcode, name="qrcode"),
+    path('allcategory', views.allcategory, name="allcategory"),
+    path('editcategory/<int:category_id>', views.editcategory, name="editcategory"),
 
 ]

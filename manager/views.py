@@ -7,8 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from menu.models import Restaurant, Category, Menu
 
 from reportlab.pdfgen import canvas
-from reportlab.graphics.barcode import code39, code128, code93, createBarcodeDrawing
-from reportlab.graphics.barcode import eanbc, qr, usps
+from reportlab.graphics.barcode import  qr
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Drawing 
 from reportlab.lib.units import mm
@@ -24,19 +23,7 @@ def index(request):
 
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
-        # print("user not found")
-        # username = "biryanimoods"
-        # password = "123sultan"
-        # user = authenticate(request, username=username, password=password)
-        # if user is not None:
-        #     login(request, user)
-        #     # Redirect to a success page.
-        # #return HttpResponse("User does not exist")
-    #print('here')
 
-    # if request.method=="POST":
-    #     print("hello")
-    #     print(request.POST["price"])
 
     
    # user = User.objects.get().all()
@@ -316,6 +303,50 @@ def qrcode(request):
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename="qrcode.pdf")
 
+
+
+def allcategory(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    
+    restaurant = Restaurant.objects.get(user_name = request.user)
+    #print(restaurant)
+    message=""    
+
+    categories = Category.objects.filter(rest_category = restaurant)
+
+    return render(request, 'manager/allcategory.html',{
+        'restaurant':restaurant,
+        'username': request.user.username,
+
+        "categories": categories,
+    })
+
+def editcategory(request, category_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    restaurant = Restaurant.objects.get(user_name = request.user)
+    categories = Category.objects.filter(rest_category = restaurant)
+    #print(restaurant)
+    message="" 
+    if request.method =="POST":
+        if Category.objects.filter(pk = category_id).exists():
+            Category.objects.filter(pk = category_id).update(
+                category_name = request.POST["category"],
+                priority = request.POST["priority"]
+            )
+            message="Category Updated Sucessfully"
+        else:
+            message="category does not exists"
+
+    return render(request, 'manager/allcategory.html',{
+        'restaurant':restaurant,
+        'username': request.user.username,
+        "message":message,
+
+        "categories": categories,
+    })
 
 
 

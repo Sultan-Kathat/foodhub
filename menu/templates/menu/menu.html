@@ -29,12 +29,11 @@
 
 {% block menu_item%}
     {% for category in categories%}
-    <div class="container menu_item" id="category_inside" data-category="{{category}}"  ><h2> {{category}}</h2></div>
-        
+    <div class="container menu_item" id="category_inside" data-category="{{category}}"  ><h1> {{category}}</h1></div>
         {%for item in menu_items%}
             {%if item.category.category_name == category%}
-                <div class="container menu_item" data-category="{{item.category.category_name}}" id="{{item.category.category_name}}" >
-                    <h4>{{item.item_name}}   </h4> 
+                <div class="container menu_item" data-category="{{item.category.category_name}}"  >
+                    <h5>{{item.item_name}}   </h5> 
                     <p id="price">₹ {{item.price}}</p>
                     <p id="ing"> {{item.ingredient}}</p>
                 </div>
