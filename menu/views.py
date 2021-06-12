@@ -52,3 +52,7 @@ def menu(request, name_fp):
      
 
     })
+
+
+def index(request):
+    return render(request, "menu/index.html")

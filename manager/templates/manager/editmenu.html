@@ -55,7 +55,7 @@
 
         <label >Category:  (<span style="color: rgb(236, 26, 26);">Last Category:</span> {{menu.category.category_name}})</label>
         <select class="form-control " name="category" required> 
-            <option></option>
+            <option value="{{category_now.id}}">{{menu.category.category_name}}</option>
             {% for category in categories%}
             <option value="{{category.id}}">{{category.category_name}}</option>
             {%endfor%}

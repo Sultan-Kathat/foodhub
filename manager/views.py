@@ -102,7 +102,10 @@ def edit_menu(request, menu_id):
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
 
     menu = Menu.objects.get(pk = menu_id)
-    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user))
+    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user)).exclude(category_name = menu.category.category_name)
+    category_now = Category.objects.get(category_name = menu.category.category_name)
+    # print(menu.category)
+    # print(category_now.id)
     rest_id = User.objects.get(username = request.user.username)
 
     return render(request, "manager/editmenu.html",{
@@ -111,6 +114,7 @@ def edit_menu(request, menu_id):
 
         "menu":menu,
         "categories": categories,
+        "category_now":category_now,
         "rest_id":rest_id,
 
     })
@@ -173,7 +177,13 @@ def category(request):
                 rest_category = Restaurant.objects.get(user_name = request.user)
                 )
             c.save()
-            return HttpResponseRedirect(reverse("index"))
+            message = f"New Category added: {new_category}  "
+            return render(request, "manager/category.html",{
+                "restaurant": restaurant,
+                "username": request.user.username,
+                "message":message,
+                # "categories":categories,
+            })
 
       
 
@@ -313,7 +323,7 @@ def allcategory(request):
     #print(restaurant)
     message=""    
 
-    categories = Category.objects.filter(rest_category = restaurant)
+    categories = Category.objects.filter(rest_category = restaurant).order_by("priority")
 
     return render(request, 'manager/allcategory.html',{
         'restaurant':restaurant,
@@ -327,7 +337,7 @@ def editcategory(request, category_id):
         return HttpResponseRedirect(reverse("login"))
 
     restaurant = Restaurant.objects.get(user_name = request.user)
-    categories = Category.objects.filter(rest_category = restaurant)
+    categories = Category.objects.filter(rest_category = restaurant).order_by("priority")
     #print(restaurant)
     message="" 
     if request.method =="POST":

@@ -23,7 +23,7 @@ class Category(models.Model):
     priority = models.SmallIntegerField(default=1000)
 
     def __str__(self):
-        return f"{self.category_name}({self.rest_category})"
+        return f"{self.category_name}"
 
 class Menu(models.Model):
     item_name = models.CharField(max_length=48)
