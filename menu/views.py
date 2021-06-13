@@ -56,3 +56,7 @@ def menu(request, name_fp):
 
 def index(request):
     return render(request, "menu/index.html")
+
+
+def index_anystring(request, anystring):
+    return render(request, "menu/index.html")

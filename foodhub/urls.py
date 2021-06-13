@@ -19,6 +19,7 @@ from menu import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('<str:anystring>', views.index_anystring),
     path('menu/', include('menu.urls')),
     path('manager/', include('manager.urls')),
 ]

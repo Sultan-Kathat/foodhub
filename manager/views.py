@@ -289,17 +289,29 @@ def qrcode(request):
     p.setFillColorCMYK(0,0,0,0.1)
     p.drawCentredString(52.5*mm, 107*mm, "SCAN THE CODE")
 
+
+    p.setFont('Courier-Oblique', 8)
+    p.setFillColor(black)
+    p.drawCentredString(52.5*mm, 25*mm, f"or")
+
     #Helvetica-Oblique:
+    
     p.setFont('Courier-Oblique', 14)
     p.setFillColor(black)
-    p.drawCentredString(52.5*mm, 15*mm, f"visit: ZuBu.in/menu/{request.user.username}")
+    p.drawCentredString(52.5*mm, 18*mm, f"visit: ZuBu.in/menu/{request.user.username}")
+
+    p.setFont('Helvetica', 9)
+    p.setFillColor(black)
+    p.drawString(30.5*mm, 7*mm, "Powered by: ")
+    p.setFillColorCMYK(0.63, 0.30,0, 0.36)
+    p.drawString(49.5*mm, 7*mm, "www.ZuBu.in")
 
 
  
 
 
     #draw a QR code
-    qr_code = qr.QrCodeWidget(f"visit: ZuBu.in/menu/{request.user.username}")
+    qr_code = qr.QrCodeWidget(f"zubu.in/menu/{request.user.username}")
     bounds = qr_code.getBounds()
     width = bounds[2] - bounds[0]
     height = bounds[3] - bounds[1]
