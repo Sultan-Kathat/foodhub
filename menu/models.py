@@ -28,7 +28,7 @@ class Category(models.Model):
 class Menu(models.Model):
     item_name = models.CharField(max_length=48)
     price= models.IntegerField()
-    ingredient = models.TextField()
+    ingredient = models.TextField(blank=True)
     stock = models.BooleanField()
     quantity = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey(Category,on_delete=models.CASCADE, related_name="menu_items", null=True)
