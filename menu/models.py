@@ -34,6 +34,7 @@ class Menu(models.Model):
     price1= models.IntegerField(blank=True,null=True)
     price_tag2 = models.CharField(max_length=16,blank=True)
     price2= models.IntegerField(blank=True,null=True)
+    food_type = models.CharField(max_length=10, blank=True, )
     ingredient = models.TextField(blank=True)
     stock = models.BooleanField()
     quantity = models.IntegerField(blank=True, null=True)

@@ -44,6 +44,30 @@
             <input type="number" class="form-control " value="{{menu.price2}}" name="price2" >
         </div>
 
+        <label >Food Type:</label>
+        <select class="form-control " name="food_type" required >
+            {%if menu.food_type == "veg" %}
+            <option value="veg">Veg</option>
+            <option value="nonveg" >Non Veg</option>
+            <option value="egg">Egg</option>
+            {% elif  menu.food_type == "nonveg" %}
+            <option value="nonveg" >Non Veg</option>
+            <option value="veg">Veg</option>
+            <option value="egg">Egg</option>
+            {% elif menu.food_type == "egg"%}
+            <option value="egg">Egg</option>
+            <option value="veg">Veg</option>
+            <option value="nonveg" >Non Veg</option>
+            {%else%}
+            <option></option>
+            <option value="veg">Veg</option>
+            <option value="nonveg" >Non Veg</option>
+            <option value="egg">Egg</option>
+            {%endif%}
+
+
+        </select>
+
         <label >Ingredient:</label>
         <input type="text" class="form-control " value="{{menu.ingredient}}" name="ingredient" >
 
