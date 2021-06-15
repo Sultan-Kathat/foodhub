@@ -23,7 +23,7 @@
         <div class="form-group">
             <label for="sel1" id="select_title">Select Category to Edit:</label>
             <select class="form-control" id="select_category">
-                <option value="Show All">Show All</option>
+                <option value="Show All" >Show All</option>
                 {% for category in categories%}
                 <option value="{{category.category_name}}">{{category.category_name}}</option>
                 {%empty%}
@@ -40,45 +40,71 @@
 
 {% block menu_item%}
   
-        {%for category in categories%}
-            <div class="container menu_item" id="category_inside" data-category="{{category.category_name}}"  ><h2> Category: {{category.category_name}}</h2></div>
+    {%for category in categories%}
+        <div class="container menu_item" id="category_inside" data-category="{{category.category_name}}"  ><h2> Category: {{category.category_name}}</h2></div>
             {%for item in menu_items%}
                 {%if item.category.category_name == category.category_name %}
-                    <div class="container menu_item" data-category="{{item.category.category_name}}"  >
+                    <div class="container menu_item" data-category="{{item.category.category_name}}" id="item_box_manager"  >
                         <h4><a href="{% url 'edit_menu' item.id %}">{{item.item_name}} </a>  </h4> 
-
+                        <div>
                         <form action="{%url 'update_price' item.id %}" method="POST" >
                             {%csrf_token%}
-                            <span style="font-size:25px;">Price:  </span>
-                            <input type="text" name="price" id="price" value="{{item.price}}" style="width: 120px;">  <span style="font-size:30px;">₹  </span>
-                            <button class="btn btn-primary" type="submit">Update Price</button>
-                        </form>
+                            <div class="form-group">
+                                <label >{{item.price_tag}} Price:</label>
+                                <input class="form-control" type="number" name="price" id="price" value="{{item.price}}" >
+                            </div>
+                            {%if item.price_tag1%}
+                                <label >{{item.price_tag1}} Price:</label>
+                                <input class="form-control" type="number" name="price1" id="price" value="{{item.price1}}" >
+                            {%endif%}
+                            {%if item.price_tag2%}
+                                <label >{{item.price_tag2}} Price:</label>
+                                <input class="form-control" type="number" name="price2" id="price" value="{{item.price2}}" >
+                            {%endif%}
 
-                        <form class="form-inline" action="{%url 'update_stock' item.id %}" method="POST" style="padding-top:15px;width: 300px;" >
-                            {%csrf_token%}
-                            <span style="font-size:25px;">Stock:  </span>
-                            <select class="form-control " name="stock"  required  style="margin:10px; width: 120px;">
-                                {% if item.stock %}  
-                                    <option value=True>Available</option>
-                                    <option value=False >Unavailable</option>
-                                {%else%}
-                                    <option value=False >Unavailable</option>
-                                    <option value=True>Available</option>
-                                    
-                                {%endif%}
-                            </select>
-                                <button class="btn btn-primary" type="submit" style="padding-left:10px" >Update</button>
-                            
+                            <button class="btn btn-primary" type="submit"  >UPDATE PRICE</button>
+
                         </form>
+                        </div>
+                        <div style="padding-top: 20px;">
+                        <form action="{%url 'update_stock' item.id %}" method="POST" >
+                            {%csrf_token%}
+
+                                <div class="form-group">
+                                    
+                                    <select class="form-control " name="stock"   required >
+                                        {% if item.stock %}  
+                                            <option value=True>Available</option>
+                                            <option value=False >Unavailable</option>
+                                        {%else%}
+                                            <option value=False >Unavailable</option>
+                                            <option value=True>Available</option>
+                                            
+                                        {%endif%}
+                                    </select>
+                                </div>
+                                    <button class="btn btn-primary" type="submit"  >UPDATE STOCK</button>
+                                
+
+                        </form>
+                        </div>
                         <p id="ing"> {{item.ingredient}}</p>
+                       
                     </div>
+
                 {%endif%}
-            {%empty%}
-                <h4> No items</h4>
-            {%endfor%}
-            
         {%empty%}
-        <h4> No categories</h4>
+            <h4> No items</h4>
         {%endfor%}
+    
+
+
+
+        
+    {%empty%}
+    <h4> No categories</h4>
+    {%endfor%}
+
+
 
 {%endblock%}

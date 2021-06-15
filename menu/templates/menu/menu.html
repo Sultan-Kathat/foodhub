@@ -34,7 +34,16 @@
             {%if item.category.category_name == category%}
                 <div class="container menu_item" data-category="{{item.category.category_name}}"  >
                     <h5>{{item.item_name}}   </h5> 
-                    <p id="price">₹ {{item.price}}</p>
+                    <p id="price">
+                        {{item.price_tag}}   ₹ {{item.price}}
+                        {%if item.price_tag1%}
+                        | {{item.price_tag1}}   ₹ {{item.price1}}
+                        {%endif%}
+                        {%if item.price_tag2%}
+                        | {{item.price_tag2}}   ₹ {{item.price2}}
+                        {%endif%}
+
+                    </p>
                     <p id="ing"> {{item.ingredient}}</p>
                 </div>
             {%endif%}

@@ -19,19 +19,54 @@
 
 {% block body%}
 <div class="container">
+    {%if error_message%}
+        <div class="alert alert-danger">
+        <strong>Alert!</strong> {{error_message}}
+    </div>
+
+    {%endif%}
+
+    {%if success_message%}
+        <div class="alert alert-success">
+        <strong>Success!</strong> {{success_message}}
+    </div>
+
+    {%endif%}
+</div>
+
+<div class="container">
     <form action="{%url 'add' %}" method="POST">
         {% csrf_token %}
-        <label >Dish Name:</label>
-        <input type="text" class="form-control " name="item_name" required>
+        <label >Dish Name:<span id="required_field"> (Required)</span></label>
+        <input type="text" class="form-control " name="item_name" placeholder="Name of Dish" required>
+        <div id="price_box">
+            <label >Price Tag:</label>
+            <input type="text" class="form-control " name="price_tag" placeholder="EXAMPLE : SMALL, MEDIUM, LARGE" >
 
-        <label >Price:</label>
-        <input type="number" class="form-control "  name="price" required>
 
+            <label >Price:<span id="required_field"> (Required)</span></label>
+            <input type="number" class="form-control "  name="price" placeholder="Price of the item" required>
+        </div>
+        <div id="price_box">
+            <label >Price Tag 1:</label>
+            <input type="text" class="form-control " name="price_tag1" placeholder="EXAMPLE : SMALL, MEDIUM, LARGE" >
+
+
+            <label >Price 1:</label>
+            <input type="number" class="form-control "  name="price1" placeholder="Price of the item 1" >
+        </div>
+        <div id="price_box">
+            <label >Price Tag 2:</label>
+            <input type="text" class="form-control " name="price_tag2" placeholder="EXAMPLE : SMALL, MEDIUM, LARGE" >
+
+            <label >Price 2:</label>
+            <input type="number" class="form-control "  name="price2" placeholder="Price of the item 2">
+        </div>
         <label >Ingredient:</label>
-        <input type="text" class="form-control "  name="ingredient" >
+        <input type="text" class="form-control "  name="ingredient" placeholder="Ingredients" >
 
-        <label >Available:</label>
-        <select class="form-control " name="stock"  required>
+        <label >Available:<span id="required_field"> (Required)</span></label>
+        <select class="form-control " name="stock"  required >
             <option></option>
             <option value=True>Available</option>
             <option value=False >Unavailable</option>
@@ -39,7 +74,7 @@
 
         </select>
 
-        <label >Category: </label>
+        <label >Category:<span id="required_field"> (Required)</span> </label>
         <select class="form-control " name="category" required> 
             <option></option>
             {% for category in categories%}
@@ -52,11 +87,6 @@
         <a href="{%url 'index'%}" class="btn btn-danger " style="margin-top: 15px;">Cancel</a>
     </form>
 
-    {%if message%}
-        <div class="alert alert-danger">
-        <strong>Alert!</strong> {{message}}
-      </div>
 
-    {%endif%}
 </div>
 {%endblock%}
