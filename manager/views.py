@@ -33,7 +33,7 @@ def index(request):
         user = User.objects.get(username=request.user.username)
  
 
-        categories = Category.objects.filter(rest_category = restaurant_name)
+        categories = Category.objects.filter(rest_category = restaurant_name).order_by("priority")
 
         #menu_items = user.menu_items.all()
         menu_items = Menu.objects.filter(rest_id = user ).order_by("category")
@@ -88,9 +88,30 @@ def edit_menu(request, menu_id):
     if request.method == "POST":
         # print(f"Item_name: {request.POST['item_name']}")
         # print(f"Category ID: {request.POST['category']}")
+        price_tag = ""
+        price_tag1 = ""
+        price_tag2 = ""
+
+        price1= None
+        price2 = None
+
+        if request.POST["price_tag"]:
+            price_tag = request.POST["price_tag"]
+
+        if request.POST["price_tag1"]: price_tag1 = request.POST["price_tag1"]
+        if request.POST["price_tag2"]: price_tag2 = request.POST["price_tag2"]
+
+        if request.POST["price1"]: price1 = int(request.POST["price1"])
+        if request.POST["price2"]: price2 = int (request.POST["price2"])
+
         Menu.objects.filter(pk=menu_id).update(
             item_name=request.POST["item_name"],
-            price = request.POST["price"],
+            price_tag= price_tag,
+            price = int(request.POST["price"]),
+            price_tag1= price_tag1,
+            price1 = price1,
+            price_tag2 = price_tag2,
+            price2 = price2,
             ingredient = request.POST["ingredient"],
             stock = request.POST["stock"],            
             category = Category.objects.get(pk = request.POST["category"]),
@@ -126,21 +147,8 @@ def add(request):
 
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
-    message = ""
-    if request.method =="POST":
-        if Menu.objects.filter(item_name = request.POST["item_name"]).exists():
-            message = "Item already exists in Menu"
-        else:
-            m = Menu(
-            item_name=request.POST["item_name"],
-            price = int(request.POST["price"]),
-            ingredient = request.POST["ingredient"],
-            stock = request.POST["stock"],            
-            category = Category.objects.get(pk = request.POST["category"]),
-            rest_id = User.objects.get(username = request.user.username)
-            )
-            m.save()
-            return HttpResponseRedirect(reverse("index"))
+    error_message = ""
+    success_message= ""
 
     #restaurant name to display on the top
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
@@ -149,6 +157,56 @@ def add(request):
     categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user))
     rest_id = User.objects.get(username = request.user.username)
 
+    if request.method =="POST":
+        if Menu.objects.filter(item_name = request.POST["item_name"]).exists():
+            error_message = "Item already exists in Menu"
+        else:
+            price_tag = ""
+            price_tag1 = ""
+            price_tag2 = ""
+
+            price1= None
+            price2 = None
+            if request.POST["price_tag"]:
+                #print(f"price tag received {request.POST['price_tag']}")
+                price_tag = request.POST["price_tag"]
+            if request.POST["price_tag1"]: price_tag1 = request.POST["price_tag1"]
+            if request.POST["price_tag2"]: price_tag2 = request.POST["price_tag2"]
+
+            if request.POST["price1"]: price1 = int(request.POST["price1"])
+            if request.POST["price2"]: price2 = int (request.POST["price2"])
+            
+                
+
+            m = Menu(
+            item_name=request.POST["item_name"],
+            price_tag= price_tag,
+            price = int(request.POST["price"]),
+            price_tag1= price_tag1,
+            price1 = price1,
+            price_tag2 = price_tag2,
+            price2 = price2,
+            ingredient = request.POST["ingredient"],
+            stock = request.POST["stock"],            
+            category = Category.objects.get(pk = request.POST["category"]),
+            rest_id = User.objects.get(username = request.user.username)
+            )
+            m.save()
+
+            success_message = "New Item added to Menu"
+            # return HttpResponseRedirect(reverse("index"))
+
+            return render(request, "manager/add.html",{
+                "restaurant":restaurant,
+                "username": request.user.username,
+
+                "categories": categories,
+                "rest_id":rest_id,
+                "error_message": error_message,
+                "success_message": success_message,
+            } )
+
+
 
     return render(request, "manager/add.html",{
         "restaurant":restaurant,
@@ -156,32 +214,35 @@ def add(request):
 
         "categories": categories,
         "rest_id":rest_id,
-        "message": message,
+        "error_message": error_message,
+        "success_message": success_message,
     } )
 
-
+#add new category 
 def category(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
     
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
-    message=""
+    error_message=""
+    success_message=""
     if request.method=="POST":
         new_category = request.POST["category"]
         #print(f"new vategory: {new_category}")
         if Category.objects.filter(category_name = new_category).exists():
-            message = "Category already exists in Menu"
+            error_message = "Category already exists in Menu"
         else:        
             c = Category(
                 category_name = new_category, 
                 rest_category = Restaurant.objects.get(user_name = request.user)
                 )
             c.save()
-            message = f"New Category added: {new_category}  "
+            success_message = f"New Category added: {new_category}  "
             return render(request, "manager/category.html",{
                 "restaurant": restaurant,
                 "username": request.user.username,
-                "message":message,
+                "error_message":error_message,
+                "success_message":success_message,
                 # "categories":categories,
             })
 
@@ -190,7 +251,8 @@ def category(request):
     return render(request, "manager/category.html",{
         "restaurant": restaurant,
         "username": request.user.username,
-        "message":message,
+        "error_message":error_message,
+        "success_message":success_message,
         # "categories":categories,
     })
 
@@ -200,7 +262,21 @@ def update_price(request, item_id):
         return HttpResponseRedirect(reverse("login"))
 
     if request.method=="POST":
-        Menu.objects.filter(id = item_id).update(price = int(request.POST["price"]))
+
+
+
+        price1= None
+        price2 = None
+        if "price1" in request.POST:
+            if request.POST["price1"]: price1 = int(request.POST["price1"])
+        if "price2" in request.POST:
+            if request.POST["price2"]: price2 = int (request.POST["price2"])
+
+        Menu.objects.filter(id = item_id).update(
+            price = int(request.POST["price"]),
+            price1 = price1,
+            price2 = price2
+            )
         # print(item_id)
         # print(request.POST["price"])
 

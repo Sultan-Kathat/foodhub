@@ -32,9 +32,14 @@
     </div>
 
 
-    {% if message%}
+    {% if error_message%}
     <div class="alert alert-danger">
-        <strong>Alert!</strong> {{message}}
+        <strong>Alert!</strong> {{error_message}}
+    </div>
+    {% endif%}
+    {% if success_message%}
+    <div class="alert alert-success">
+        <strong>Success!</strong> {{success_message}}
     </div>
     {% endif%}
 

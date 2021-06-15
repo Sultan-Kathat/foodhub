@@ -51,7 +51,7 @@
  
  #price {
      font-family:sans-serif;
-     font-size: 20px;
+     font-size: 18px;
      color:rgb(107, 105, 105);
      font-weight:bold;
  }
@@ -93,3 +93,4 @@
  #div_select{
      background-color: white;
  }
+

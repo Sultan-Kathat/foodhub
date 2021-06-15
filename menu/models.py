@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from reportlab.lib.colors import Blacker
 
 
 
@@ -27,7 +28,12 @@ class Category(models.Model):
 
 class Menu(models.Model):
     item_name = models.CharField(max_length=48)
+    price_tag = models.CharField(max_length=16, blank=True)
     price= models.IntegerField()
+    price_tag1 = models.CharField(max_length=16, blank=True)
+    price1= models.IntegerField(blank=True,null=True)
+    price_tag2 = models.CharField(max_length=16,blank=True)
+    price2= models.IntegerField(blank=True,null=True)
     ingredient = models.TextField(blank=True)
     stock = models.BooleanField()
     quantity = models.IntegerField(blank=True, null=True)

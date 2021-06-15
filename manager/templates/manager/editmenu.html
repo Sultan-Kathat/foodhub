@@ -22,9 +22,27 @@
         {% csrf_token %}
         <label >Dish Name:</label>
         <input type="text" class="form-control " value="{{menu.item_name}}" name="item_name" required>
+        <div id="price_box">
+            <label>Price tag</label>
+            <input type="text" class="form-control" value="{{menu.price_tag}}" name="price_tag">
 
-        <label >Price:</label>
-        <input type="number" class="form-control " value="{{menu.price}}" name="price" required>
+            <label >Price:</label>
+            <input type="number" class="form-control " value="{{menu.price}}" name="price" required>
+        </div>
+        <div id="price_box">
+            <label>Price tag 1</label>
+            <input type="text" class="form-control" value="{{menu.price_tag1}}" name="price_tag1">
+        
+            <label >Price 1:</label>
+            <input type="number" class="form-control " value="{{menu.price1}}" name="price1" >
+        </div>
+        <div id="price_box">
+            <label>Price tag 2</label>
+            <input type="text" class="form-control" value="{{menu.price_tag2}}" name="price_tag2">
+        
+            <label >Price 2:</label>
+            <input type="number" class="form-control " value="{{menu.price2}}" name="price2" >
+        </div>
 
         <label >Ingredient:</label>
         <input type="text" class="form-control " value="{{menu.ingredient}}" name="ingredient" >
