@@ -36,7 +36,7 @@ def index(request):
         categories = Category.objects.filter(rest_category = restaurant_name).order_by("priority")
 
         #menu_items = user.menu_items.all()
-        menu_items = Menu.objects.filter(rest_id = user ).order_by("category")
+        menu_items = Menu.objects.filter(rest_id = user ).order_by("id")
         #print(restaurant_name.rest_name)
     else:
         restaurant_name = "No restaurant registered with user"

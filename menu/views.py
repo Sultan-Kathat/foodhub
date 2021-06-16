@@ -32,7 +32,7 @@ def menu(request, name_fp):
 
 
     #menu_items = user.menu_items.all()
-    menu_items = Menu.objects.filter(rest_id = user, stock = True ).order_by("category")
+    menu_items = Menu.objects.filter(rest_id = user, stock = True ).order_by("id")
     #print(restaurant_name.rest_name)
 
 
