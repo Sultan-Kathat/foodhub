@@ -17,6 +17,19 @@
 {%endblock%}
 
 {% block body%}
+<!-- display messages -->
+<div class="container">
+    {%if error_message%}
+        <div class="alert alert-danger">
+            <strong>Alert!</strong> {{error_message}}
+        </div>
+    {%endif%}
+    {% if success_message%}
+        <div class="alert alert-success">
+            <strong>Success!</strong> {{success_message}}
+        </div>
+    {% endif%}
+</div>
 <div class="container">
     <form  action="{%url 'edit_menu' menu.id %}" method="POST">
         {% csrf_token %}

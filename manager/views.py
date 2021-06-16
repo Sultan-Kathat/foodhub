@@ -84,6 +84,8 @@ def edit_menu(request, menu_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
+    error_message = ""
+    success_message=""
 
     if request.method == "POST":
         # print(f"Item_name: {request.POST['item_name']}")
@@ -104,28 +106,33 @@ def edit_menu(request, menu_id):
         if request.POST["price1"]: price1 = int(request.POST["price1"])
         if request.POST["price2"]: price2 = int (request.POST["price2"])
 
-        Menu.objects.filter(pk=menu_id).update(
-            item_name=request.POST["item_name"],
-            price_tag= price_tag,
-            price = int(request.POST["price"]),
-            price_tag1= price_tag1,
-            price1 = price1,
-            price_tag2 = price_tag2,
-            price2 = price2,
-            food_type = request.POST["food_type"],
-            ingredient = request.POST["ingredient"],
-            stock = request.POST["stock"],            
-            category = Category.objects.get(pk = request.POST["category"]),
-            rest_id = User.objects.get(username = request.user.username)
-            )
-        return HttpResponseRedirect(reverse("index"))
+        print(f"category: {request.POST['category']}")
+
+        if Menu.objects.filter(item_name = request.POST["item_name"], rest_id = request.user).exclude(pk=menu_id).exists():
+            error_message = "Item already exists in Menu"
+        else:
+            Menu.objects.filter(pk=menu_id).update(
+                item_name=request.POST["item_name"],
+                price_tag= price_tag,
+                price = int(request.POST["price"]),
+                price_tag1= price_tag1,
+                price1 = price1,
+                price_tag2 = price_tag2,
+                price2 = price2,
+                food_type = request.POST["food_type"],
+                ingredient = request.POST["ingredient"],
+                stock = request.POST["stock"],            
+                category = Category.objects.get(pk = request.POST["category"]),
+                rest_id = User.objects.get(username = request.user.username)
+                )
+            return HttpResponseRedirect(reverse("index"))
     
     #restaurant name to display on the top
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
 
     menu = Menu.objects.get(pk = menu_id)
     categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user)).exclude(category_name = menu.category.category_name)
-    category_now = Category.objects.get(category_name = menu.category.category_name)
+    category_now = Category.objects.get(category_name = menu.category.category_name, rest_category = Restaurant.objects.get(user_name = request.user))
     # print(menu.category)
     # print(category_now.id)
     rest_id = User.objects.get(username = request.user.username)
@@ -138,6 +145,9 @@ def edit_menu(request, menu_id):
         "categories": categories,
         "category_now":category_now,
         "rest_id":rest_id,
+
+        "error_message":error_message,
+        "success_message":success_message,
 
     })
 
@@ -159,7 +169,7 @@ def add(request):
     rest_id = User.objects.get(username = request.user.username)
 
     if request.method =="POST":
-        if Menu.objects.filter(item_name = request.POST["item_name"]).exists():
+        if Menu.objects.filter(item_name = request.POST["item_name"], rest_id = request.user).exists():
             error_message = "Item already exists in Menu"
         else:
             price_tag = ""
@@ -231,7 +241,7 @@ def category(request):
     if request.method=="POST":
         new_category = request.POST["category"]
         #print(f"new vategory: {new_category}")
-        if Category.objects.filter(category_name = new_category).exists():
+        if Category.objects.filter(category_name = new_category, rest_category = Restaurant.objects.get(user_name = request.user)).exists():
             error_message = "Category already exists in Menu"
         else:        
             c = Category(
