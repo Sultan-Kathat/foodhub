@@ -19,7 +19,7 @@ class Restaurant(models.Model):
         return f"{self.rest_name}"
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=32)
+    category_name = models.CharField(max_length=64)
     rest_category = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="category",null=True)
     priority = models.SmallIntegerField(default=1000)
 
@@ -27,7 +27,7 @@ class Category(models.Model):
         return f"{self.category_name}"
 
 class Menu(models.Model):
-    item_name = models.CharField(max_length=48)
+    item_name = models.CharField(max_length=128)
     price_tag = models.CharField(max_length=16, blank=True)
     price= models.IntegerField()
     price_tag1 = models.CharField(max_length=16, blank=True)
