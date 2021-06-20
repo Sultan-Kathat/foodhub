@@ -22,4 +22,5 @@ urlpatterns = [
     path('<str:anystring>', views.index_anystring),
     path('menu/', include('menu.urls')),
     path('manager/', include('manager.urls')),
+    path('reports/', include('reports.urls')),
 ]

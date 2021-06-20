@@ -44,6 +44,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     'menu',
     'manager',
+    'reports',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,0 +1,14 @@
+{% extends "reports/layout.html" %}
+
+{%block body%}
+
+    <div class="container">
+        <h2>{{restaurant.rest_name}}</h2>
+    </div>
+    <div class="container">
+        <ul>
+            <li>Total Number of categories: {{category_count}}</li>
+            <li>Total Number of Menu Items: {{menu_count}}</li>
+        </ul>
+    </div>
+{% endblock %}

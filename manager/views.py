@@ -164,7 +164,9 @@ def add(request):
 
     #restaurant name to display on the top
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
-
+    # check numer of menu item
+    menu_count = Menu.objects.filter(rest_id = request.user).count()
+    print(f"number of items in menu: {menu_count}")
     # laod the categories and restaurant to the form select option
     categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user)).order_by("priority")
     rest_id = User.objects.get(username = request.user.username)

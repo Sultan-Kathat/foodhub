@@ -1,0 +1,14 @@
+{% extends "reports/layout.html"%}
+
+
+{% block body %}
+    <div class="container">
+        <h2>Registered Restaurant</h2>
+        {%for restaurant in restaurants%}
+
+        <ul>
+            <li><a href="{% url 'restaurant_stats' restaurant.id%}">{{restaurant.rest_name}}</a></li>
+        </ul>
+        {%endfor%}
+    </div>
+{%endblock%}
