@@ -42,6 +42,7 @@ class Menu(models.Model):
     quantity = models.IntegerField(blank=True, null=True)
     category = models.ForeignKey(Category,on_delete=models.CASCADE, related_name="menu_items", null=True)
     rest_id =  models.ForeignKey(User, on_delete=models.CASCADE, related_name="menu_items", null=True)
+    
     def __str__(self):
         return f"{self.item_name},Price: {self.price}, stock: {self.stock}"
 

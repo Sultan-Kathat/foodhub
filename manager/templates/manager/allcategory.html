@@ -17,33 +17,39 @@
 {%endblock%}
 
 {%block body%}
-    <div class="container ">
+    
         <h2>All Categories</h2>
         {%for category in categories%}
-            <form class="form-inline" action="{% url 'editcategory' category.id%}" method="POST">
+        <div class="container">
+            <form class="" action="{% url 'editcategory' category.id%}" method="POST" >
                 {%csrf_token%}
-                <div class="form-group" style="padding: 10px;">
-                    <label for="category" style="font-size: 20px;">Category: </label>
-                    <input type="text" class="form-control" name="category" value="{{category.category_name}}">
+                <div class="row d-flex " >
+                    <div class="col-sm-4">
+                        <label for="category" >Category: </label>
+                        <input type="text" class="form-control" name="category" value="{{category.category_name}}">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="priority">Priority: </label>
+                        <input type="text" class="form-control" name="priority" value="{{category.priority}}">
+                    </div>
+                    <div class="col-sm-4 align-self-end" style="margin-top: 10px;">
+                        <button type="submit" class="btn btn-info " >SAVE CATEGORY DETAILS</button> 
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="priority">Priority: </label>
-                    <input type="text" class="form-control" name="priority" value="{{category.priority}}">
-                </div>
-                <div>
-                <button type="submit" class="btn btn-info" style="margin-left: 10px;">SAVE CATEGORY DETAILS</button>
-                </div>
+
             </form>
-            <hr>
+        Click here to <a href="{% url 'updatecategory' category.id%}" style="color: red">Edit Description</a>
+        </div>
+        <hr>
         {%empty%}
             <p>No categories to display, add category from <a href="{% url 'category'%}">Add category</a> option</p>
         {%endfor%}
-    </div>
-
+   
+ 
     {%if message%}
     <div class="alert alert-info">
         <strong>Messag:</strong> {{message}}
       </div>
     {%endif%}
-
+    
 {%endblock%}

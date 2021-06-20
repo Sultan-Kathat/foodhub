@@ -18,17 +18,24 @@ def menu(request, name_fp):
 
     categories = Category.objects.filter(rest_category = restaurant_name,).order_by("priority")
     
-    categories_active = []
+
+
+    categorydetails={}
+
+    # sample_dict = {
+    #     "biryani":"chicken,mutton",
+    #     "salads":"veg cucumber etc"
+    # }
     for category in categories:
         if category.menu_items.all().count()>0: # check if the category have any item in it 
             #print(f"{category.category_name}:  {category.menu_items.all()}")
             for item in category.menu_items.all(): # calling all the item in category using related name and if they have stock/available
                 if item.stock==True:
-                    categories_active.append(category.category_name)
+                    categorydetails[category.category_name] = category.description
                     break
-        else:
-            print(category)
-    print(categories_active)
+    #     else:
+    #         print(category)
+    # print(categories_active)
 
 
     #menu_items = user.menu_items.all()
@@ -46,9 +53,11 @@ def menu(request, name_fp):
         "name_fp": name_fp,
         "restaurant_name" : restaurant_name,
 
-        "categories": categories_active,
-        "menu_items": menu_items
+        "categories": categories,
+        "menu_items": menu_items,
+        # "sample_dict":sample_dict
         #"menu":menu,
+        "categorydetails":categorydetails,
      
 
     })

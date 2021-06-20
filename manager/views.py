@@ -1,3 +1,4 @@
+from logging import error
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, request, FileResponse
@@ -240,13 +241,17 @@ def category(request):
     success_message=""
     if request.method=="POST":
         new_category = request.POST["category"]
+        des = request.POST["description"]
+        if len(des) > 1024:
+            error_message="max length for description 1024 characters"
         #print(f"new vategory: {new_category}")
-        if Category.objects.filter(category_name = new_category, rest_category = Restaurant.objects.get(user_name = request.user)).exists():
+        elif Category.objects.filter(category_name = new_category, rest_category = Restaurant.objects.get(user_name = request.user)).exists():
             error_message = "Category already exists in Menu"
         else:        
             c = Category(
                 category_name = new_category, 
-                rest_category = Restaurant.objects.get(user_name = request.user)
+                rest_category = Restaurant.objects.get(user_name = request.user),
+                description = des
                 )
             c.save()
             success_message = f"New Category added: {new_category}  "
@@ -435,9 +440,10 @@ def allcategory(request):
 def editcategory(request, category_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
-
+    
     restaurant = Restaurant.objects.get(user_name = request.user)
     categories = Category.objects.filter(rest_category = restaurant).order_by("priority")
+    
     #print(restaurant)
     message="" 
     if request.method =="POST":
@@ -459,6 +465,43 @@ def editcategory(request, category_id):
     })
 
 
+# this function is used to update description of already existed category
+def updatecategory(request, category_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    error_message = ""
+    success_message = ""
+
+
+
+    if request.method == "POST":
+        des = request.POST["description"]
+        if len(des)>1024:
+            error_message = "Discription length cannot be more than 1024 characters"
+        else:
+            if Category.objects.filter(pk = category_id).exists():
+                Category.objects.filter(pk = category_id).update(
+                    description = des,
+
+                )
+                success_message="Description Updated Sucessfully"
+            else:
+                error_message="Category does not exists"
+
+    restaurant = Restaurant.objects.get(user_name = request.user)
+    category = Category.objects.get(pk = category_id)
+
+    return render(request, 'manager/updatecategory.html',{
+        'restaurant':restaurant,
+        'username': request.user.username,
+        "category": category,
+        "error_message":error_message,
+        "success_message":success_message,
+
+    } )
+
+    
 
 
 

@@ -19,8 +19,8 @@
 {% endblock %} -->
 
 {%block category_select%}
-    {% for category in categories%}
-    <option value="{{category}}">{{category}}</option>
+{% for key, value in categorydetails.items %}
+    <option value="{{key}}">{{key}}</option>
     {%empty%}
     <option value="No Category">No Category</option>
     {%endfor%}
@@ -28,10 +28,14 @@
 
 
 {% block menu_item%}
-    {% for category in categories%}
-    <div class="container menu_item" id="category_inside" data-category="{{category}}"  ><h1> {{category}}</h1></div>
+    {% for key, value in categorydetails.items %}
+    <div class="container menu_item" id="category_inside" data-category="{{key}}"  >
+        <h1> {{key}}</h1>
+       <p id="cat_details">{{value}}</p>
+    </div>
+        
         {%for item in menu_items%}
-            {%if item.category.category_name == category%}
+            {%if item.category.category_name == key%}
                 <div class="container menu_item" data-category="{{item.category.category_name}}"  >
                     <h5>{{item.item_name}}   </h5> 
                     <p id="price">
@@ -50,5 +54,8 @@
         {%empty%}
             <h4> No items in Menu</h4>
         {%endfor%}
+ 
     {%endfor%}
+    
+
 {%endblock%}

@@ -1,3 +1,4 @@
+from os import name
 from django.urls import path
 from . import views
 
@@ -15,5 +16,6 @@ urlpatterns = [
     path('qrcode/', views.qrcode, name="qrcode"),
     path('allcategory', views.allcategory, name="allcategory"),
     path('editcategory/<int:category_id>', views.editcategory, name="editcategory"),
+    path('updatecategory/<int:category_id>', views.updatecategory, name="updatecategory")
 
 ]
