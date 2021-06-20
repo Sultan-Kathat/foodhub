@@ -14,6 +14,7 @@ class Restaurant(models.Model):
     city = models.CharField(max_length=64, blank=True)
     state=models.CharField(max_length=64, blank=True)
     phone = models.CharField(max_length=32, blank=True)
+    email = models.EmailField(blank=True)
     
     def __str__(self):
         return f"{self.rest_name}"
@@ -22,6 +23,7 @@ class Category(models.Model):
     category_name = models.CharField(max_length=64)
     rest_category = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="category",null=True)
     priority = models.SmallIntegerField(default=1000)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.category_name}"

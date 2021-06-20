@@ -165,7 +165,7 @@ def add(request):
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
 
     # laod the categories and restaurant to the form select option
-    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user))
+    categories = Category.objects.filter(rest_category = Restaurant.objects.get(user_name = request.user)).order_by("priority")
     rest_id = User.objects.get(username = request.user.username)
 
     if request.method =="POST":
