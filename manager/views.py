@@ -1,4 +1,6 @@
+from hashlib import new
 from logging import error
+from re import S
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, request, FileResponse
@@ -10,9 +12,10 @@ from menu.models import Restaurant, Category, Menu
 from reportlab.pdfgen import canvas
 from reportlab.graphics.barcode import  qr
 from reportlab.graphics import renderPDF
-from reportlab.graphics.shapes import Drawing 
+from reportlab.graphics.shapes import Drawing, numericXShift 
 from reportlab.lib.units import mm
 from reportlab.lib.colors import pink, black, red, blue, green
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 import io
 
@@ -503,11 +506,171 @@ def updatecategory(request, category_id):
 
     } )
 
+
+# to dowmload menu in pdf format
+def menu_pdf(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    error_message = ""
+    success_message = ""
+    restaurant = Restaurant.objects.get(user_name = request.user)
+
+    categories = Category.objects.filter(rest_category = restaurant,).order_by("priority")
     
 
 
+    categorydetails={}
+
+    # sample_dict = {
+    #     "biryani":"chicken,mutton",
+    #     "salads":"veg cucumber etc"
+    # }
+    for category in categories:
+        if category.menu_items.all().count()>0: # check if the category have any item in it 
+            #print(f"{category.category_name}:  {category.menu_items.all()}")
+            for item in category.menu_items.all(): # calling all the item in category using related name and if they have stock/available
+                if item.stock==True:
+                    categorydetails[category.category_name] = category.description
+                    break
+    #     else:
+    #         print(category)
+    # print(categories_active)
 
 
+    #menu_items = user.menu_items.all()
+    menu_items = Menu.objects.filter(rest_id = request.user, stock = True ).order_by("id")
+    
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+    p.setTitle("Menu")
+    p.setAuthor("ZuBu")
+    p.setPageSize((210*mm, 297*mm))
+    p.setStrokeColor(black)
+
+    def menu_heading():
+        # make outline on page
+        p.rect(5*mm, 5*mm, 200*mm, 287*mm, stroke=1, fill=0) 
+        p.setFont('Helvetica-Bold', 30)
+        p.drawCentredString(107*mm, 268*mm, restaurant.rest_name.upper())
+        # 2 horizontal line
+        p.line(20*mm, 260*mm, 190*mm, 260*mm)
+        p.line(20*mm, 256*mm, 190*mm, 256*mm)
+        # vertical line
+        p.line(105*mm, 10*mm, 105*mm, 251*mm)
+
+    menu_heading()
+    # draw string for category
+    section=1
+    page = 1
+    x=50
+    y=245
+
+    for key in categorydetails:
+        if section == 1:
+            x=55
+        elif section == 2:
+            x=155
+        # print category name
+        p.setFont('Helvetica-Bold', 10)
+        p.drawCentredString(x*mm,y*mm,key)
+        # check if category has description if yes then print the same
+        if categorydetails[key]:
+            y = y-5
+            p.setFont('Helvetica-Oblique', 8)
+            description = categorydetails[key]
+            if len(description)>64:
+                description = description[:64]
+            p.drawCentredString(x*mm,y*mm,description)
+        if section==1: x = 10
+        elif section==2: x = 110
+        y = y-5
+        if section ==1 and y <=10:
+            section=2
+            y=245
+            x=110
+        elif section==2 and y <=10:   
+                #enter page number on page 
+                p.setFont('Helvetica', 8)
+                p.drawCentredString(105*mm,6*mm,f"Page - {page}")
+                #change page  
+                p.showPage()
+                page=page+1
+                menu_heading()
+                section=1
+                y=245
+                x=10
+        for item in menu_items:
+            if item.category.category_name == key:
+                p.setFont('Helvetica', 10)
+                item_name = str(check_item_text_length(item.item_name))
+                p.drawString(x*mm,y*mm,item_name)
+                p.drawString((x+77)*mm,y*mm, f"INR {item.price}")
+                y=y-5
+            if section==1 and y <=10:
+                section=2
+                y=245
+                x=110
+            elif section==2 and y <=10:   
+                p.setFont('Helvetica', 8)   
+                p.drawCentredString(105*mm,6*mm,f"Page - {page}")
+                p.showPage()
+                page=page+1
+                menu_heading()
+                section=1
+                y=245
+                x=10
+    
+    # show page number
+    p.setFont('Helvetica', 8)   
+    p.drawCentredString(105*mm,6*mm,f"Page - {page}")
+    # show final page
+    p.showPage()
+
+    # to save final file
+    p.save()
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="menu.pdf")
+
+
+
+
+
+def check_item_text_length(text):
+    dot_text=".................................................................................................................................."
+    width = stringWidth(text, "Helvetica", 10,)
+    # convert width from pt to mm
+    width = (width/72)*25.4
+    #print(f"width = {width}")
+    if text == "":
+        return ""
+    if width <= 83:
+        # if printing starts at x=10 mm
+        gap = 87-(width+10)
+        number_of_dots = int(gap/0.98)
+        #print(f"number of dots = {number_of_dots}")
+        dots = dot_text[:number_of_dots]
+        text_to_print = f"{text}{dots}"
+        return text_to_print
+    if width > 83:
+
+        for i in range(1, len(text)):
+            s= text[:-i]
+            new_width = stringWidth(s, "Helvetica", 10,)
+            # convert width from pt to mm
+            new_width = (new_width/72)*25.4
+            if new_width <=73:
+                break
+            
+        gap = 87-(new_width+10)
+        number_of_dots = int(gap/0.98)
+        #print(f"number of dots = {number_of_dots}")
+        dots = dot_text[:number_of_dots]
+        text_to_print = f"{s}{dots}"
+        return text_to_print
 
 
     
