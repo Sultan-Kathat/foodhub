@@ -175,7 +175,9 @@ def add(request):
     rest_id = User.objects.get(username = request.user.username)
 
     if request.method =="POST":
-        if Menu.objects.filter(item_name = request.POST["item_name"], rest_id = request.user).exists():
+        if menu_count >= 500:
+            error_message = "You have used maximum items in menu allowed in your plan. Please contact customer care for more details."
+        elif Menu.objects.filter(item_name = request.POST["item_name"], rest_id = request.user).exists():
             error_message = "Item already exists in Menu"
         else:
             price_tag = ""
@@ -244,10 +246,18 @@ def category(request):
     restaurant = Restaurant.objects.get(user_name = User.objects.get(username = request.user.username))
     error_message=""
     success_message=""
+
+    category_count = Category.objects.filter(rest_category = restaurant).count()
+    #menu_count = Menu.objects.filter(rest_id = request.user).count()
+    #print(f"category = {category_count} and menu item = {menu_count}")
+    
+
     if request.method=="POST":
         new_category = request.POST["category"]
         des = request.POST["description"]
-        if len(des) > 1024:
+        if category_count >= 250:
+            error_message="You have used maximum category in your plan. Please contact customer care for more details." 
+        elif len(des) > 1024:
             error_message="max length for description 1024 characters"
         #print(f"new vategory: {new_category}")
         elif Category.objects.filter(category_name = new_category, rest_category = Restaurant.objects.get(user_name = request.user)).exists():

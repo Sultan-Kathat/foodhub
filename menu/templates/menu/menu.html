@@ -6,17 +6,7 @@
 
 
 
-<!-- {%block category%}
-{%for category in categories%}
-    <li class="nav-item" >
-        <a class="nav-link text-light" id="category" href="#">{{category.category_name}}</a>
-    </li>
-{%empty%}
-    <li class="nav-item">
-        <a class="nav-link text-light" href="#">Category1</a>
-    </li>
-{%endfor%}
-{% endblock %} -->
+
 
 {%block category_select%}
 {% for key, value in categorydetails.items %}
@@ -30,7 +20,7 @@
 {% block menu_item%}
     {% for key, value in categorydetails.items %}
     <div class="container menu_item" id="category_inside" data-category="{{key}}"  >
-        <h1> {{key}}</h1>
+        <h2> {{key}}</h2>
        <p id="cat_details">{{value}}</p>
     </div>
         
