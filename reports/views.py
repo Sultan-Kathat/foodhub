@@ -33,7 +33,17 @@ def restaurant_stats(request, rest_id):
     user = User.objects.get(username = restaurant.user_name)
     category_count = Category.objects.filter(rest_category = restaurant).count()
     menu_count = Menu.objects.filter(rest_id = user).count()
-    visitors = Visit.objects.get(user = user)
+    if Visit.objects.filter(user = user).exists(): 
+        visitors = Visit.objects.get(user = user)
+    else:
+        v = Visit(
+        visit_counter = 0,
+        user = user,
+        #last_visit = datetime.now()
+        )
+        v.save()
+        visitors = Visit.objects.get(user = user)
+    
 
     return render(request, "reports/statistics.html",{
         "rest_id":rest_id,
