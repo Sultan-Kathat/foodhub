@@ -55,7 +55,7 @@ def menu(request, name_fp):
         v = Visit(
             visit_counter = 0,
             user = user,
-            last_visit = datetime.now()
+            #last_visit = datetime.now()
             )
         v.save()
     else:
