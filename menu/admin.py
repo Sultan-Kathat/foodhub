@@ -1,6 +1,6 @@
 from django.contrib import admin
-from django.contrib.admin.options import ModelAdmin
-from django.db import models
+#from django.contrib.admin.options import ModelAdmin
+#from django.db import models
 from menu.models import Menu, Category, Restaurant
 
 class MenuAdmin(admin.ModelAdmin):

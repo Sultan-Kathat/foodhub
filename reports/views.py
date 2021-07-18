@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from menu.models import Restaurant, Category, Menu
+from .models import Visit
 
 # Create your views here.
 def index(request):
@@ -32,11 +33,13 @@ def restaurant_stats(request, rest_id):
     user = User.objects.get(username = restaurant.user_name)
     category_count = Category.objects.filter(rest_category = restaurant).count()
     menu_count = Menu.objects.filter(rest_id = user).count()
+    visitors = Visit.objects.get(user = user)
 
     return render(request, "reports/statistics.html",{
         "rest_id":rest_id,
         "restaurant":restaurant,
         "category_count":category_count,
         "menu_count":menu_count,
+        "visitors": visitors,
 
     })

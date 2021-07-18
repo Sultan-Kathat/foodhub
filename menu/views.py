@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Menu, Category, Restaurant
+from reports.models import Visit
+
+import datetime
 
 # Create your views here.
 
@@ -45,7 +48,23 @@ def menu(request, name_fp):
 
     # if not request.user.is_authenticated:
     #     return HttpResponse("Restaurant Does Not Exist")
+
+    # visitor counter loop
+    # visit_counter(name_fp)   
+    if not Visit.objects.filter(user = user).exists(): 
+        v = Visit(
+            visit_counter = 0,
+            user = user,
+            last_visit = datetime.now()
+            )
+        v.save()
+    else:
         
+        v = Visit.objects.get(user = user)
+        print(v.visit_counter)
+        #Visit.objects.filter(user = user).update(visit_counter = current_visit+1)
+        v.visit_counter = v.visit_counter +1
+        v.save()
 
     #print(request.user.get_username())
 
@@ -61,6 +80,10 @@ def menu(request, name_fp):
      
 
     })
+
+
+def visit_counter():
+    pass
 
 
 def index(request):
