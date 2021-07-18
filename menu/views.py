@@ -61,7 +61,7 @@ def menu(request, name_fp):
     else:
         
         v = Visit.objects.get(user = user)
-        print(v.visit_counter)
+        #print(v.visit_counter)
         #Visit.objects.filter(user = user).update(visit_counter = current_visit+1)
         v.visit_counter = v.visit_counter +1
         v.save()
